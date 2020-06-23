@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>
+      Talkie
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button   (click)="loadData(true)" >
+        <ion-icon  name="refresh-circle"></ion-icon>
+      </ion-button>
+      <ion-button  (click)="search()">
+        <ion-icon   slot="icon-only" name="search"></ion-icon>
+      </ion-button>
+      <ion-button  (click)="logout()">
+        <ion-icon  name="arrow-redo-circle-outline"></ion-icon>
+      </ion-button>
+      
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="bg">
+  <ion-list *ngIf="allContacts.length > 0; else nocontacts"  lines="none" class="app-list">
+    <ion-item  *ngFor="let contact of allContacts"   (click)="open(contact)"    >
+         
+     
+          <ion-avatar slot="start">
+            <img src="https://ui-avatars.com/api/?name={{ contact._objectInstance.displayName }}&background=02a9f4&color=fff">
+          </ion-avatar>
+          <ion-label>
+            <h2>{{ contact._objectInstance.displayName }}</h2>
+            <p>{{ Contactparser(contact._objectInstance.phoneNumbers[0].value) }}</p>
+           
+          </ion-label>
+       
+        </ion-item>
+      </ion-list>
+  <ng-template #nocontacts>
+    <ion-item>
+      No Contacts in Your Mobile have Talkie Account.
+    </ion-item>
+  </ng-template>
+
+</ion-content>
