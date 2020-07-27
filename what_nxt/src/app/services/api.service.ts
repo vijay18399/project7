@@ -46,7 +46,7 @@ export class ApiService {
     if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline || !forceRefresh) {
       return from(this.getLocalData('users'));
     } else {
-      return this.http.get(`https://bee-server.herokuapp.com/numbers`).pipe(
+      return this.http.get(`${environment.apiUrl6}/numbers`).pipe(
         map(res => res),
         tap(res => {
           console.log('returns real live API data');
@@ -59,7 +59,7 @@ export class ApiService {
     if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline || !forceRefresh) {
       return from(this.getLocalData('groups'));
     } else {
-      return this.http.get(`https://bee-server.herokuapp.com/groups`).pipe(
+      return this.http.get(`${environment.apiUrl6}/groups`).pipe(
         map(res => res),
         tap(res => {
           console.log('returns real live API data');
@@ -69,17 +69,17 @@ export class ApiService {
     }
   }
   addToGroups(data, gid): Observable<any> {
-    return this.http.post(`https://bee-server.herokuapp.com/addto/` + gid, data).pipe(
+    return this.http.post(`${environment.apiUrl6}/addto/` + gid, data).pipe(
       take(1),
     );
   }
   CreateGroups(data): Observable<any> {
-    return this.http.post(`https://bee-server.herokuapp.com/creategroup`, data).pipe(
+    return this.http.post(`${environment.apiUrl6}/creategroup`, data).pipe(
       take(1),
     );
   }
   UpdateGroup(data): Observable<any> {
-    return this.http.post(`https://bee-server.herokuapp.com/update`, data).pipe(
+    return this.http.post(`${environment.apiUrl6}/update`, data).pipe(
       take(1),
     );
   }
@@ -91,7 +91,7 @@ export class ApiService {
       // tslint:disable-next-line: no-shadowed-variable
       const from = data.from;
       const to = data.to;
-      const url = "https://bee-server.herokuapp.com/messages/" + from + "/" + to;
+      const url = `${environment.apiUrl6}/messages/` + from + "/" + to;
       return this.http.get(url).pipe(
         map(res => res),
         tap(res => {
@@ -107,7 +107,7 @@ export class ApiService {
     } else {
       // tslint:disable-next-line: no-shadowed-variable
       const gid = data.groupid;
-      const url = 'https://bee-server.herokuapp.com/gmessages/' + gid;
+      const url = `${environment.apiUrl6}/gmessages/` + gid;
       return this.http.get(url).pipe(
         map(res => res),
         tap(res => {
@@ -121,7 +121,7 @@ export class ApiService {
   UpdateLocalMessages(forceRefresh: boolean = false, data): Observable<any> {
     const from = data.from;
     const to = data.to;
-    const url = "https://bee-server.herokuapp.com/messages/" + from + "/" + to;
+    const url = `${environment.apiUrl6}/messages/` + from + "/" + to;
     return this.http.get(url).pipe(
       map(res => res),
       tap(res => {
@@ -132,7 +132,7 @@ export class ApiService {
   }
 
   updateUser(user, data): Observable<any> {
-    let url = `https://bee-server.herokuapp.com/numbers`;
+    let url = `${environment.apiUrl6}/numbers`;
 
     if (this.networkService.getCurrentNetworkStatus() == ConnectionStatus.Offline) {
       return from(this.offlineManager.storeRequest(url, 'PUT', data));
@@ -172,7 +172,7 @@ export class ApiService {
     return this.userData.getValue();
   }
   login(credentials: { Name: string, phoneNumber: string, Gender: string, BirthDate: string }) {
-    return this.http.post(`https://bee-server.herokuapp.com/login`, credentials).pipe(
+    return this.http.post(`${environment.apiUrl6}/login`, credentials).pipe(
       take(1),
       map(res => {
         // Extract the JWT
@@ -186,7 +186,7 @@ export class ApiService {
       })
     );
   }
-
+  
   logout() {
     this.storage.remove(TOKEN_KEY).then(() => {
       this.router.navigateByUrl('/');
@@ -201,8 +201,11 @@ export class ApiService {
   }
   Translate(languages, text) {
     const url = `${environment.apiUrl4}/translate`;
+    const endpoint = 'https://api.cognitive.microsofttranslator.com';
+    const  region = 'centralindia';
+    const key = '9c91a7130db04381860b12547fd31d35';
     const data = {
-      text, languages
+      text, languages,endpoint,region,key
     };
     return this.http.post(url, data).pipe(
       take(1)
@@ -210,7 +213,12 @@ export class ApiService {
   }
 
   Upload(data) {
-    return this.http.post(`${environment.apiUrl3}/upload`, data).pipe(
+    return this.http.post(`${environment.apiUrl3}`, data).pipe(
+      take(1)
+    );
+  }
+  PostContacts(data) {
+    return this.http.post(`${environment.apiUrl6}/contacts`, data).pipe(
       take(1)
     );
   }

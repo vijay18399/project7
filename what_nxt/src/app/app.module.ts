@@ -16,7 +16,7 @@ import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { SocketIoModule, SocketIoConfig } from 'ngx-socket-io';
 import {IonicGestureConfig} from './gestures/ionic-gesture-config';
 const config: SocketIoConfig = { url:   process.env.SOCKET ||
-   'https://bee-socket.herokuapp.com'  , options: {} };
+   'https://takie-socket.herokuapp.com'  , options: {} };
 import { ImagePicker } from '@ionic-native/image-picker/ngx';
 import { File } from '@ionic-native/File/ngx';
 import { MediaCapture } from '@ionic-native/media-capture/ngx';

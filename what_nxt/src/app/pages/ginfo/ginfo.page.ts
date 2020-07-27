@@ -92,10 +92,10 @@ export class GinfoPage implements OnInit {
     }
   }
   Remove(pno) {
-    let members = this.members.filter(term =>  term.phoneNumber !== pno );
-    let membercheck = this.membercheck.filter(x =>  x !== pno );
+    let members = this.members.filter(term => term.phoneNumber !== pno);
+    let membercheck = this.membercheck.filter(x => x !== pno);
     const data = {
-      _id : this.group._id,
+      _id: this.group._id,
       groupname: this.groupname,
       members: members,
       membercheck: membercheck,
@@ -103,7 +103,7 @@ export class GinfoPage implements OnInit {
     };
     this.api.UpdateGroup(data).subscribe(res => {
       if (res['success']) {
-        this.GroupContacts = this.GroupContacts.filter(term =>  this.Contactparser(term._objectInstance.phoneNumbers[0].value) !== pno );
+        this.GroupContacts = this.GroupContacts.filter(term => this.Contactparser(term._objectInstance.phoneNumbers[0].value) !== pno);
         this.members = members;
         this.membercheck = membercheck;
         this.group.members = members;
@@ -115,13 +115,13 @@ export class GinfoPage implements OnInit {
     });
   }
   add() {
- const group = this.group;
- const navigationExtras = {
-  state: {
-   group
-  }
-};
- this.router.navigate(['uselector'], navigationExtras);
+    const group = this.group;
+    const navigationExtras = {
+      state: {
+        group
+      }
+    };
+    this.router.navigate(['uselector'], navigationExtras);
   }
   back() {
     const user = this.user;

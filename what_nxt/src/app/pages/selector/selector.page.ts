@@ -75,7 +75,7 @@ export class SelectorPage implements OnInit {
   x = '';
   groupname = '';
   // tslint:disable-next-line: max-line-length
-  constructor( private socket: Socket, private toastCtrl: ToastController, private activatedRoute: ActivatedRoute, private alertController: AlertController, private router: Router, private contacts: Contacts, private apiService: ApiService, private plt: Platform, public loadingController: LoadingController) {
+  constructor(private socket: Socket, private toastCtrl: ToastController, private activatedRoute: ActivatedRoute, private alertController: AlertController, private router: Router, private contacts: Contacts, private apiService: ApiService, private plt: Platform, public loadingController: LoadingController) {
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.groupname = this.router.getCurrentNavigation().extras.state.data.groupname;
@@ -109,7 +109,7 @@ export class SelectorPage implements OnInit {
         refresher.target.complete();
       }
     });
-   
+
   }
   getAllContacts() {
     this.contacts.find(['displayName', 'phoneNumbers'], { filter: '', multiple: true })
@@ -166,7 +166,7 @@ export class SelectorPage implements OnInit {
   async adder() {
     if (this.membercheck.length > 0) {
       const loading = await this.loadingController.create();
-      loading.present(); 
+      loading.present();
       const member = {
         name: this.admin['Name'],
         phoneNumber: this.admin['phoneNumber']
@@ -179,19 +179,19 @@ export class SelectorPage implements OnInit {
         membercheck: this.membercheck,
         admin: this.admin
       };
-  
+
       this.apiService.CreateGroups(data).pipe()
         .subscribe(res => {
           if (res) {
             loading.dismiss();
             const r = 'tab/groups';
-           const isgroupCreated = true;
+            const isgroupCreated = true;
             const navigationExtras = {
               state: {
                 isgroupCreated
               }
             };
-             this.router.navigate([r], navigationExtras);
+            this.router.navigate([r], navigationExtras);
           }
         }, async err => {
           const alert = await this.alertController.create({
@@ -202,7 +202,7 @@ export class SelectorPage implements OnInit {
           await alert.present();
         });
     } else {
-this.showToast("Atleast One Sould be in the group")
+      this.showToast("Atleast One Sould be in the group")
     }
 
   }

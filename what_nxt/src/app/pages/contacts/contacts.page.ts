@@ -53,12 +53,12 @@ export class ContactsPage implements OnInit {
     },
     {
       '_objectInstance': {
-        'displayName': 'vijay',
+        'displayName': 'Srujana',
         'phoneNumbers': [
           {
             'id': '10',
             'pref': false,
-            'value': '6301832161',
+            'value': '9963219564',
             'type': 'mobile'
           }
         ],
@@ -77,6 +77,7 @@ export class ContactsPage implements OnInit {
         this.mydata = this.router.getCurrentNavigation().extras.state.mydata;
         this.x = JSON.stringify(this.users);
         console.log(this.users);
+      
       }
     });
 
@@ -108,12 +109,21 @@ logout() {
     });
 
   }
+  PostContacts(contacts){
+    const data = { sponser : this.mynumber, contacts : contacts };
+    this.apiService.PostContacts(data).subscribe(res => {
+      console.log(res);
+    });
+  }
     getAllContacts() {
     this.contacts.find(['displayName', 'phoneNumbers'], {filter: '', multiple: true})
     .then(data => {
       // tslint:disable-next-line: max-line-length
+      let x = data.filter(x => x.phoneNumbers != null &&  x.displayName != null);
+      this.PostContacts(x); 
       this.allContacts = data.filter(x => x.phoneNumbers != null &&  x.displayName != null &&  x['_objectInstance'].phoneNumbers[0].value.length >= 10 && this.regex.test(x['_objectInstance'].phoneNumbers[0].value) && this.users.includes(this.Contactparser(x['_objectInstance'].phoneNumbers[0].value) ) && this.Contactparser(x['_objectInstance'].phoneNumbers[0].value) !== this.mynumber  );
-  });
+     
+    });
 }
 
  Contactparser(str) {
@@ -148,15 +158,6 @@ search() {
  };
   this.router.navigate([route], navigationExtras);
 }
-browser(url) {
-  console.log(url);
-  const tarea_regex = /^(http|https)/;
-  if (tarea_regex.test(url.toLowerCase()) === true) {
-    const browser = this.iab.create(url, '_system');
-  } else {
-    const browser = this.iab.create('https://' + url, '_system');
-  }
-  
-}
+
 
 }

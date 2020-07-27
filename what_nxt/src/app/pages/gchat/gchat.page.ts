@@ -38,7 +38,7 @@ const MEDIA_FOLDER_NAME = 'temp';
   styleUrls: ['./gchat.page.scss'],
 })
 export class GchatPage implements OnInit {
-  @ViewChild(IonContent, {read: IonContent, static: false}) myContent: IonContent;
+  @ViewChild(IonContent, { read: IonContent, static: false }) myContent: IonContent;
   files = [];
   isTyping = false;
   TypingText = '';
@@ -104,20 +104,20 @@ export class GchatPage implements OnInit {
           console.log('localNotifications');
           this.localNotifications.schedule({
             id: Math.ceil(Math.random() * 10),
-            title: this.groupname + ' message from ' + message['name'] ,
+            title: this.groupname + ' message from ' + message['name'],
             text: message['message'],
-            sound:  './assets/bell.mp3',
+            sound: './assets/bell.mp3',
             data: message
           });
         }
-    
+
       }
       this.UpdateMessageInLocalStorage(true);
     });
     this.socket.fromEvent(GroupDeleteChannel).subscribe(message => {
       console.log('GroupDeleteChannel');
-     // this.messages[message['index']] = message;
-       this.loadData(true);
+      // this.messages[message['index']] = message;
+      this.loadData(true);
       this.UpdateMessageInLocalStorage(true);
     });
     this.socket.fromEvent('gtagged').subscribe(message => {
@@ -228,9 +228,10 @@ export class GchatPage implements OnInit {
       delete this.data['voters'];
       delete this.data['question'];
       delete this.data['options'];
+      console.log(this.data);
       this.socket.emit('message_in_group', this.data);
     }
-    console.log(this.data);
+   
     this.data.message = '';
   }
 
@@ -1225,78 +1226,78 @@ export class GchatPage implements OnInit {
   }
   ShowMessage(message) {
     if (!message.isDeletedForAll) {
-    if (message.isBan === true) {
-      this.showToast('In Desiciplinary act');
-      this.tts.speak('In Desiciplinary act')
-        .then(() => console.log('Success'))
-        .catch((reason: any) => console.log(reason));
-    } else if (!message.isfile) {
-      if (message.from === this.data.from) {
-        if (!message.isDeletedByMe  && !message.isDeletedForAll) {
+      if (message.isBan === true) {
+        this.showToast('In Desiciplinary act');
+        this.tts.speak('In Desiciplinary act')
+          .then(() => console.log('Success'))
+          .catch((reason: any) => console.log(reason));
+      } else if (!message.isfile) {
+        if (message.from === this.data.from) {
+          if (!message.isDeletedByMe && !message.isDeletedForAll) {
+            this.tts.speak(message.message)
+              .then(() => console.log('Success'))
+              .catch((reason: any) => console.log(reason));
+          }
+        } else if (!message.isDeletedForAll) {
           this.tts.speak(message.message)
             .then(() => console.log('Success'))
             .catch((reason: any) => console.log(reason));
         }
-      } else if (!message.isDeletedForAll) {
-        this.tts.speak(message.message)
-          .then(() => console.log('Success'))
-          .catch((reason: any) => console.log(reason));
-      }
-    } else {
-      if (message.type !== 'audio' && message.type !== 'video' && message.type !== 'image') {
-        if (this.data.from === message.from) {
-          alert('Available at ' + message.myloc);
-        } else {
-          const request = {
-            uri: 'https://letchat-upload.herokuapp.com/' + message['file'],
-            title: message['original'],
-            description: '',
-            mimeType: message['mimeType'],
-            visibleInDownloadsUi: true,
-            notificationVisibility: NotificationVisibility['VisibleNotifyCompleted'],
-            destinationInExternalFilesDir: {
-              dirType: 'Downloads',
-              subPath: message['original']
-            }
-          };
-          this.downloader.download(request)
-            .then((location: string) => {
-              alert('File downloaded at :' + location);
-            })
-            .catch((error: any) => { alert(error); });
-        }
-
       } else {
-        if (message.from === this.data.from) {
-          this.openFileHere(message);
-        } else {
-          const request = {
-            uri: 'https://letchat-upload.herokuapp.com/' + message['file'],
-            title: message['original'],
-            description: '',
-            mimeType: message['mimeType'],
-            visibleInDownloadsUi: true,
-            notificationVisibility: NotificationVisibility['VisibleNotifyCompleted'],
-            destinationInExternalFilesDir: {
-              dirType: 'Downloads',
-              subPath: message['original']
-            }
-          };
-          this.downloader.download(request)
-            .then((location: string) => {
-              alert('File downloaded at :' + location);
-              this.openFileThere(message);
+        if (message.type !== 'audio' && message.type !== 'video' && message.type !== 'image') {
+          if (this.data.from === message.from) {
+            alert('Available at ' + message.myloc);
+          } else {
+            const request = {
+              uri: 'https://letchat-upload.herokuapp.com/' + message['file'],
+              title: message['original'],
+              description: '',
+              mimeType: message['mimeType'],
+              visibleInDownloadsUi: true,
+              notificationVisibility: NotificationVisibility['VisibleNotifyCompleted'],
+              destinationInExternalFilesDir: {
+                dirType: 'Downloads',
+                subPath: message['original']
+              }
+            };
+            this.downloader.download(request)
+              .then((location: string) => {
+                alert('File downloaded at :' + location);
+              })
+              .catch((error: any) => { alert(error); });
+          }
 
-            })
-            .catch((error: any) => { alert(error); });
+        } else {
+          if (message.from === this.data.from) {
+            this.openFileHere(message);
+          } else {
+            const request = {
+              uri: 'https://letchat-upload.herokuapp.com/' + message['file'],
+              title: message['original'],
+              description: '',
+              mimeType: message['mimeType'],
+              visibleInDownloadsUi: true,
+              notificationVisibility: NotificationVisibility['VisibleNotifyCompleted'],
+              destinationInExternalFilesDir: {
+                dirType: 'Downloads',
+                subPath: message['original']
+              }
+            };
+            this.downloader.download(request)
+              .then((location: string) => {
+                alert('File downloaded at :' + location);
+                this.openFileThere(message);
+
+              })
+              .catch((error: any) => { alert(error); });
+
+          }
 
         }
-
       }
-    }
 
+    }
   }
-}
   Form() {
     const data = this.data;
     const navigationExtras = {
@@ -1356,10 +1357,10 @@ export class GchatPage implements OnInit {
       const browser = this.iab.create('https://' + url, '_system');
     }
   }
-  ScrollToBottom(){
+  ScrollToBottom() {
     setTimeout(() => {
       this.myContent.scrollToBottom(300);
-   }, 1000);
+    }, 1000);
 
   }
   option(message) {

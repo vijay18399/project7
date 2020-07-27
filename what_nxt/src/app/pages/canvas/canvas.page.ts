@@ -4,7 +4,7 @@ import { Base64ToGallery, Base64ToGalleryOptions } from '@ionic-native/base64-to
 import { ActivatedRoute, Router } from '@angular/router';
 import { Socket } from 'ngx-socket-io';
 import { ApiService } from '../../services/api.service';
-import {  AlertController, ActionSheetController, LoadingController } from '@ionic/angular';
+import { AlertController, ActionSheetController, LoadingController } from '@ionic/angular';
 import { TextToSpeech } from '@ionic-native/text-to-speech/ngx';
 import { finalize } from 'rxjs/operators';
 
@@ -18,9 +18,9 @@ export class CanvasPage implements AfterViewInit {
     to: '',
     from: '',
     message: '',
-    myloc :''
+    myloc: ''
   };
-  
+
   @ViewChild('imageCanvas', { static: false }) canvas: any;
   canvasElement: any;
   saveX: number;
@@ -30,10 +30,10 @@ export class CanvasPage implements AfterViewInit {
   drawing = false;
 
   selectedColor = '#9e2956';
-  colors = [ '#9e2956', '#c2281d', '#de722f', '#edbf4c', '#5db37e', '#459cde', '#4250ad', '#802fa3' ];
+  colors = ['#9e2956', '#c2281d', '#de722f', '#edbf4c', '#5db37e', '#459cde', '#4250ad', '#802fa3'];
   lineWidth = 5;
 
-  constructor( private plt: Platform, private tts: TextToSpeech, public actionSheetController: ActionSheetController, private loadingCtrl: LoadingController, public alertCtrl: AlertController, private apiService: ApiService, private route: ActivatedRoute, private toastCtrl: ToastController, private router: Router, private socket: Socket, private base64ToGallery: Base64ToGallery) { 
+  constructor(private plt: Platform, private tts: TextToSpeech, public actionSheetController: ActionSheetController, private loadingCtrl: LoadingController, public alertCtrl: AlertController, private apiService: ApiService, private route: ActivatedRoute, private toastCtrl: ToastController, private router: Router, private socket: Socket, private base64ToGallery: Base64ToGallery) {
     if (this.router.getCurrentNavigation().extras.state) {
       this.data.to = this.router.getCurrentNavigation().extras.state.data.to;
       this.data.from = this.router.getCurrentNavigation().extras.state.data.from;
@@ -52,7 +52,7 @@ export class CanvasPage implements AfterViewInit {
 
   startDrawing(ev) {
     this.drawing = true;
-    console.log('started'+this.drawing);
+    console.log('started' + this.drawing);
     this.saveX = ev.touches[0].pageX - this.position.x;
     this.saveY = ev.touches[0].pageY - this.position.y
   }
@@ -60,11 +60,11 @@ export class CanvasPage implements AfterViewInit {
   endDrawing() {
 
     this.drawing = false;
-    console.log('ended' +this.drawing);
+    console.log('ended' + this.drawing);
   }
 
   moved(ev) {
-    console.log('moving' +this.drawing);
+    console.log('moving' + this.drawing);
     if (!this.drawing) return;
     const currentX = ev.touches[0].pageX - this.position.x;
     const currentY = ev.touches[0].pageY - this.position.y;
@@ -83,10 +83,10 @@ export class CanvasPage implements AfterViewInit {
     this.saveX = currentX;
     this.saveY = currentY;
   }
-  ionViewDidEnter () {
+  ionViewDidEnter() {
     this.ctx = this.canvas.nativeElement.getContext('2d');
     this.position = this.canvas.nativeElement.getBoundingClientRect();
-}
+  }
 
   exportCanvasImage() {
     var dataUrl = this.canvasElement.toDataURL();
@@ -94,13 +94,13 @@ export class CanvasPage implements AfterViewInit {
     // Clear the current canvas
     let ctx = this.canvasElement.getContext('2d');
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-       const options: Base64ToGalleryOptions = { prefix: 'canvas_', mediaScanner: true };
-       this.base64ToGallery.base64ToGallery(dataUrl, options).then(
-         async res => {
-         this.data.myloc = res;
-         },
-         err => console.log('Error saving image to gallery ', err)
-       );
+    const options: Base64ToGalleryOptions = { prefix: 'canvas_', mediaScanner: true };
+    this.base64ToGallery.base64ToGallery(dataUrl, options).then(
+      async res => {
+        this.data.myloc = res;
+      },
+      err => console.log('Error saving image to gallery ', err)
+    );
     var data = dataUrl.split(',')[1];
     const name = Date.now() + '.png';
     let blob = this.b64toBlob(data, 'image/png');

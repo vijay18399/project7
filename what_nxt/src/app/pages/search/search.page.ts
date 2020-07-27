@@ -17,15 +17,15 @@ export class SearchPage implements OnInit {
         this.mynumber = this.router.getCurrentNavigation().extras.state.phoneNumber;
       }
     });
-   }
+  }
 
   ngOnInit() {
-    
+
   }
   Contactparser(str) {
     str = str.split(' ').join('');
     str = str.slice(str.length - 10);
-    return str ;
+    return str;
   }
 
   open(contact) {
@@ -33,17 +33,17 @@ export class SearchPage implements OnInit {
     const phoneNumber = this.mynumber;
     const route = 'chat';
     const navigationExtras = {
-     state: {
-       contact,
-       phoneNumber,
-       phoneNumber2
-     }
-   };
+      state: {
+        contact,
+        phoneNumber,
+        phoneNumber2
+      }
+    };
     this.router.navigate([route], navigationExtras);
-   }
+  }
 
-   onSearchTerm(ev: CustomEvent) {
-    
+  onSearchTerm(ev: CustomEvent) {
+
     const val = ev.detail.value;
     console.log(val);
     if (val && val.trim() !== '') {
@@ -51,7 +51,8 @@ export class SearchPage implements OnInit {
         return term._objectInstance.displayName.toLowerCase().indexOf(val.trim().toLowerCase()) > -1;
       });
     } else {
-           this.contacts = this.backup;    }
+      this.contacts = this.backup;
+    }
   }
 
 }

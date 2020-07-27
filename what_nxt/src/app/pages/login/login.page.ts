@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Sim } from '@ionic-native/sim/ngx';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController } from '@ionic/angular';
+import { AlertController,Platform, LoadingController } from '@ionic/angular';
 import { ApiService } from '../../services/api.service';
 import { finalize } from 'rxjs/operators';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import Swal from 'sweetalert2';
 const helper = new JwtHelperService();
 @Component({
   selector: 'app-login',
@@ -14,7 +15,7 @@ const helper = new JwtHelperService();
 export class LoginPage implements OnInit {
 
   public simInfo: any;
-  public cards: any;
+  public cards = [];
   // today = new Date().toJSON().slice(0,10).replace(/-/g, '-');
   user = {
     Name: '',
@@ -22,12 +23,18 @@ export class LoginPage implements OnInit {
     Gender: 'M',
     BirthDate: new Date().toJSON().slice(0, 10).replace(/-/g, '-')
   };
+   isDesktop = false;
   users = [];
-  constructor(private sim: Sim, private router: Router, private api: ApiService, private alertCtrl: AlertController, private loadingCtrl: LoadingController) { }
+  constructor( public platform: Platform, private sim: Sim, private router: Router, private api: ApiService, private alertCtrl: AlertController, private loadingCtrl: LoadingController) { }
   ngOnInit() {
     this.getSimData();
     this.loadData(true);
+  
+ 
   }
+ 
+
+
   loadData(refresh = false, refresher?) {
     this.api.getUsers(refresh).subscribe(res => {
       this.users = res;
@@ -43,10 +50,17 @@ export class LoginPage implements OnInit {
         let simData = await this.sim.getSimInfo();
         this.simInfo = simData;
         this.cards = simData.cards;
-        console.log(simData);
+        this.cards = this.cards.filter(x => x.phoneNumber != null);
+        if(this.cards.length==0){
+          this.isDesktop = true;
+        }
+     //   alert(JSON.stringify(simData));
       }
     } catch (error) {
-      console.log(error);
+      if(this.cards.length==0){
+        this.isDesktop = true;
+      }
+    //  alert(JSON.stringify(error));
     }
   }
   async login() {
@@ -83,7 +97,7 @@ export class LoginPage implements OnInit {
           await alert.present();
         });
     } else {
-      alert('Please fill all mandatory fields');
+      Swal.fire('Oops...', 'Please fill all mandatory fields!', 'error');
     }
 
 

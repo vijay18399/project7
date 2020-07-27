@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar >
+  <ion-toolbar>
     <ion-buttons slot="start">
       <ion-back-button></ion-back-button>
     </ion-buttons>
@@ -7,23 +7,23 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content  >
+<ion-content>
   <ion-card>
-    <ion-card-header >
+    <ion-card-header>
       Urls and spam check Report
     </ion-card-header>
-    <ion-card-content  >
-     <ion-list  lines="none" class="app-list">
-        <ion-item  *ngFor="let url of urls"  (click)="open(url.url)"  >
-              <ion-label>
-                <h2>{{ url.url }} </h2>
-                <p>{{ url.spamcheck }}</p>
-              </ion-label>
-              <ion-button  color="success" size="small" (click)="copier(url)"   > <ion-icon name="copy"></ion-icon></ion-button>
-            </ion-item>
-          </ion-list>
+    <ion-card-content>
+      <ion-list lines="none" class="app-list">
+        <ion-item *ngFor="let url of urls" >
+          <ion-label (click)="open(url.url)" >
+            <h2>{{ url.url }} </h2>
+            <p>{{ url.spamcheck }}</p>
+          </ion-label>
+          <ion-button color="success" size="small" (click)="copier(url)">
+            <ion-icon name="copy"></ion-icon>
+          </ion-button>
+        </ion-item>
+      </ion-list>
     </ion-card-content>
   </ion-card>
 </ion-content>
-
-

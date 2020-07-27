@@ -21,11 +21,10 @@ export class OcrPage implements OnInit {
   numbers = [];
   l = null;
   isurl = false;
-   constructor(private callNumber: CallNumber, private iab: InAppBrowser, private browserTab: BrowserTab, private clipboard: Clipboard, private route: ActivatedRoute, private toastCtrl: ToastController, private router: Router) {
+  constructor(private callNumber: CallNumber, private iab: InAppBrowser, private browserTab: BrowserTab, private clipboard: Clipboard, private route: ActivatedRoute, private toastCtrl: ToastController, private router: Router) {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.result = this.router.getCurrentNavigation().extras.state.result.blocks.blocktext;
-
         this.url = this.router.getCurrentNavigation().extras.state.url;
         this.LoadResult();
       }
@@ -35,6 +34,9 @@ export class OcrPage implements OnInit {
 
   ngOnInit() {
     this.LoadResult();
+  }
+  copier(url) {
+    this.clipboard.copy(url.raw);
   }
 
 
@@ -61,9 +63,7 @@ export class OcrPage implements OnInit {
       alert('Seems to be email');
     }
   }
-  copier(url) {
-    this.clipboard.copy(url.raw);
-  }
+
   openNumber(num) {
     this.callNumber.callNumber(num, true)
       .then(res => console.log('Launched dialer!', res))

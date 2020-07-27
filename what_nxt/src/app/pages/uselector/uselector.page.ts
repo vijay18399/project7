@@ -17,7 +17,56 @@ export class UselectorPage implements OnInit {
   xmembercheck = [];
   membercheck = [];
   members = [];
- 
+  r = [
+    {
+      '_objectInstance': {
+
+        'displayName': 'soundarya',
+        'phoneNumbers': [
+          {
+            'id': '5',
+            'pref': false,
+            'value': '6302342712',
+            'type': 'mobile'
+          }
+        ],
+
+
+      },
+      'rawId': '1'
+    },
+    {
+      '_objectInstance': {
+
+        'displayName': 'Ravi Cse c',
+        'phoneNumbers': [
+          {
+            'id': '5',
+            'pref': false,
+            'value': '8121193336',
+            'type': 'mobile'
+          }
+        ],
+
+
+      },
+      'rawId': '4'
+    },
+    {
+      '_objectInstance': {
+        'displayName': 'vijay',
+        'phoneNumbers': [
+          {
+            'id': '10',
+            'pref': false,
+            'value': '6301832161',
+            'type': 'mobile'
+          }
+        ],
+      },
+      'rawId': '2'
+    }
+  ];
   constructor(private loadingCtrl: LoadingController, private activatedRoute: ActivatedRoute, private alertController: AlertController, private apiService: ApiService, private router: Router, private plt: Platform, private contacts: Contacts) {
     this.activatedRoute.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
@@ -28,10 +77,10 @@ export class UselectorPage implements OnInit {
   }
 
   ngOnInit() {
-    
     this.plt.ready().then(() => {
       // this.mynumber = this.activatedRoute.snapshot.paramMap.get('phoneNumber');
       this.getAllContacts();
+
     });
   }
   ionViewWillEnter() {
@@ -61,15 +110,15 @@ export class UselectorPage implements OnInit {
 
   }
   add(contact) {
- 
+
     if (this.membercheck.includes(this.Contactparser(contact._objectInstance.phoneNumbers[0].value))) {
-      
+
       this.membercheck = this.membercheck.filter(value =>
-         value !== this.Contactparser(contact._objectInstance.phoneNumbers[0].value)
+        value !== this.Contactparser(contact._objectInstance.phoneNumbers[0].value)
       );
 
-      this.members = this.members.filter(attr => 
-         attr.phoneNumber !== this.Contactparser(contact._objectInstance.phoneNumbers[0].value) );
+      this.members = this.members.filter(attr =>
+        attr.phoneNumber !== this.Contactparser(contact._objectInstance.phoneNumbers[0].value));
     } else {
       this.membercheck.push(this.Contactparser(contact._objectInstance.phoneNumbers[0].value));
       const data = {
@@ -96,7 +145,7 @@ export class UselectorPage implements OnInit {
   }
   async adder() {
     const loading = await this.loadingCtrl.create();
-    loading.present(); 
+    loading.present();
     for (var x of this.membercheck) {
       this.group.membercheck.push(x);
     }
@@ -107,8 +156,8 @@ export class UselectorPage implements OnInit {
       .subscribe(res => {
         if (res) {
           loading.dismiss();
-         const group =this.group;
-         const user = this.users; 
+          const group = this.group;
+          const user = this.users;
           const navigationExtras = {
             state: {
               group, user

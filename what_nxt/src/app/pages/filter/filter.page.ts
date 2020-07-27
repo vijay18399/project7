@@ -37,24 +37,24 @@ export class FilterPage implements OnInit {
   count = null;
   // tslint:disable-next-line: max-line-length
   constructor(private imagePicker: ImagePicker,
-              private mediaCapture: MediaCapture,
-              private file: File,
-              private media: Media,
-              private streamingMedia: StreamingMedia,
-              private photoViewer: PhotoViewer,
-              private fileChooser: FileChooser,
-              private filePath: FilePath,
-              private document: DocumentViewer,
-              private downloader: Downloader,
-              private tts: TextToSpeech,
-              public actionSheetController: ActionSheetController,
-              private loadingCtrl: LoadingController, 
-              public alertCtrl: AlertController, 
-              private apiService: ApiService, 
-              private route: ActivatedRoute, 
-              private toastCtrl: ToastController, 
-              private router: Router, 
-              private socket: Socket) {
+    private mediaCapture: MediaCapture,
+    private file: File,
+    private media: Media,
+    private streamingMedia: StreamingMedia,
+    private photoViewer: PhotoViewer,
+    private fileChooser: FileChooser,
+    private filePath: FilePath,
+    private document: DocumentViewer,
+    private downloader: Downloader,
+    private tts: TextToSpeech,
+    public actionSheetController: ActionSheetController,
+    private loadingCtrl: LoadingController,
+    public alertCtrl: AlertController,
+    private apiService: ApiService,
+    private route: ActivatedRoute,
+    private toastCtrl: ToastController,
+    private router: Router,
+    private socket: Socket) {
     this.route.queryParams.subscribe(params => {
       if (this.router.getCurrentNavigation().extras.state) {
         this.messages = this.router.getCurrentNavigation().extras.state.messages;
@@ -64,22 +64,22 @@ export class FilterPage implements OnInit {
         this.user = this.router.getCurrentNavigation().extras.state.user;
         this.groupname = this.router.getCurrentNavigation().extras.state.group_name;
         this.count = this.router.getCurrentNavigation().extras.state.count;
-        if (this.opt === 'Media' ) {
-          this.messages = this.messages.filter(x => x.isfile === true  );
+        if (this.opt === 'Media') {
+          this.messages = this.messages.filter(x => x.isfile === true);
         } else if (this.opt === 'Form') {
-          this.messages = this.messages.filter(x => x.isForm === true  );
+          this.messages = this.messages.filter(x => x.isForm === true);
         } else {
-          this.messages = this.messages.filter(x => x.TagName === this.opt  );
+          this.messages = this.messages.filter(x => x.TagName === this.opt);
         }
       }
     });
-   }
+  }
 
   ngOnInit() {
   }
-  
+
   getSentiment(message) {
-    
+
     if (message.isTagged) {
       if (message.TagName === 'Important') {
         return 'primary';
@@ -88,16 +88,16 @@ export class FilterPage implements OnInit {
       } else if (message.TagName === 'Confidential') {
         return 'dark';
       }
-    } else{
-    if (message.score > 0.5) {
-      return 'success';
-    } else if (message.score < 0.0) {
-      return 'danger';
     } else {
-      return 'default';
-    }
+      if (message.score > 0.5) {
+        return 'success';
+      } else if (message.score < 0.0) {
+        return 'danger';
+      } else {
+        return 'default';
+      }
 
-  }
+    }
   }
   isspam(str) {
     if (str === 'spam') {
@@ -266,7 +266,7 @@ export class FilterPage implements OnInit {
             console.log(data);
             this.socket.emit('deleted', data);
           }
-        }, 
+        },
         {
           text: 'Translation',
           icon: 'language-outline',
@@ -300,9 +300,6 @@ export class FilterPage implements OnInit {
       .subscribe(async res => {
         console.log(res);
         let message = '';
-        if (res['length'] == 0) {
-          message = 'No urls found';
-        }
         for (let i = 0; i < res['length']; i++) {
           message = message + `<ion-anchor (onclick)="open(res[i].url)"> ${res[i].url} is ${res[i].spamcheck} <ion-anchor/><br>`;
         }
@@ -321,7 +318,7 @@ export class FilterPage implements OnInit {
         await alert.present();
       });
   }
-  
+
   async Translate(x) {
     const alert = await this.alertCtrl.create({
       header: 'Select Languages to translate',
@@ -772,32 +769,32 @@ export class FilterPage implements OnInit {
   }
 
   async StartTranslation(languages, text) {
-  console.log(languages, text );
-  const loading = await this.loadingCtrl.create();
-  loading.present();
+    console.log(languages, text);
+    const loading = await this.loadingCtrl.create();
+    loading.present();
 
-  this.apiService.Translate(languages, text).pipe(
-    finalize(() => loading.dismiss())
-  )
-    .subscribe(async res => {
-      if (res['statusCode'] !== 200) {
-        const alert = await this.alertCtrl.create({
-          header: 'Please Check Internet Connection',
-          message: res['msg'],
-          buttons: ['OK']
-        });
-        await alert.present();
-      } else {
-        console.log(res);
-        const navigationExtras = {
-          state: {
-            res, text
-          }
-        };
-        this.router.navigate(['lang'], navigationExtras);
-      }
+    this.apiService.Translate(languages, text).pipe(
+      finalize(() => loading.dismiss())
+    )
+      .subscribe(async res => {
+        if (res['statusCode'] !== 200) {
+          const alert = await this.alertCtrl.create({
+            header: 'Please Check Internet Connection',
+            message: res['msg'],
+            buttons: ['OK']
+          });
+          await alert.present();
+        } else {
+          console.log(res);
+          const navigationExtras = {
+            state: {
+              res, text
+            }
+          };
+          this.router.navigate(['lang'], navigationExtras);
+        }
 
-    });
+      });
 
   }
   speaker() {

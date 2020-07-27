@@ -4,10 +4,10 @@
 
 export const environment = {
   production: false,
-  apiUrl2: 'https://letchats-services.herokuapp.com/api',
-  apiUrl3: 'https://letchat-upload.herokuapp.com' ,
-  apiUrl4: 'https://tutorialq.herokuapp.com',
-  apiUrl5: 'https://url-classifier-api.herokuapp.com'
+  apiUrl3: 'https://talkie-file-server.000webhostapp.com/upload.php' ,
+  apiUrl4: 'https://translator-api.herokuapp.com',
+  apiUrl5: 'https://spam-url-checker-api.herokuapp.com/api',
+ apiUrl6: 'https://talkie-backend-api.herokuapp.com'
 };
 
 /*

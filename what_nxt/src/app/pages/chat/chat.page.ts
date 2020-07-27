@@ -267,7 +267,7 @@ export class ChatPage implements OnInit {
 
 
   sendMessage() {
-    if (this.data.message) {
+    if (this.data.message.length) {
       this.socket.emit('send-message', this.data);
     }
 
@@ -305,14 +305,13 @@ if (!message.isDeletedForAll) {
         .catch((reason: any) => console.log(reason));
     } else if (!message.isfile) {
       if (message.from === this.data.from) {
-        if (!message.isDeletedByMe && !message.isDeletedForAll) {
+        if (!message.isDeletedByMe) {
           this.tts.speak(message.message)
             .then(() => console.log('Success'))
             .catch((reason: any) => console.log(reason));
         }
       } else {
-
-        if (!message.isDeletedByYou && !message.isDeletedForAll) {
+        if (!message.isDeletedByYou) {
           this.tts.speak(message.message)
             .then(() => console.log('Success'))
             .catch((reason: any) => console.log(reason));
@@ -331,7 +330,7 @@ if (!message.isDeletedForAll) {
               .catch(e => alert('Available at ' + message.urloc));
           } else {
             const request = {
-              uri: 'https://letchat-upload.herokuapp.com/' + message['file'],
+              uri: 'https://talkie-file-server.000webhostapp.com/uploads/' + message['file'],
               title: message['original'],
               description: '',
               mimeType: message['mimeType'],
@@ -363,7 +362,7 @@ if (!message.isDeletedForAll) {
           } else {
             alert('downloading file');
             const request = {
-              uri: 'https://letchat-upload.herokuapp.com/' + message['file'],
+              uri: 'https://talkie-file-server.000webhostapp.com/uploads/' + message['file'],
               title: message['original'],
               description: '',
               mimeType: message['mimeType'],
@@ -489,10 +488,10 @@ if (!message.isDeletedForAll) {
         };
         this.router.navigate(['spam'], navigationExtras);
       }, async err => {
-        console.log(err);
+        console.log(err.error.msg);
         const alert = await this.alertCtrl.create({
           header: 'error',
-          message: err.msg,
+          message: err.error.msg,
           buttons: ['OK']
         });
         await alert.present();
